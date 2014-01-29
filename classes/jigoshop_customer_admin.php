@@ -51,8 +51,10 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 			//add_action('wp_ajax_view_customer_order_history', array( $this,'view_customer_order_history_callback'));
 
 			if(isset($_POST['process_fufillment_csv'])) {
+				$this->doCSV();
 				if(get_option('jigoshop_order_exporter_type') == 'ftp') {
-					$this->doCSV();
+					
+					$this->ftpCSVFile();
 				}
 				if(get_option('jigoshop_order_exporter_type') == 'email') {
 					$this->doEmail();
@@ -470,7 +472,7 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 			}
 
 			// -- Send FTP File To Server
-			$this->ftpCSVFile();
+			
 		}
 
 		public function changeOrderFufillmentStatus() {
