@@ -16,17 +16,10 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 		var $errors = array();
 	
 		public function __construct() {
-
-			
-
-			// Load the plugin when Jigoshop is enabled
 			if ( in_array( 'jigoshop/jigoshop.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 				add_action('init', array($this, 'install'));
 				add_action('init', array($this, 'load_all_hooks'));
 			}
-			
-
-
 			parent::__construct();
 		}
 
@@ -39,17 +32,12 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 			}
 		}
 
-		public function load_all_hooks() {	
-			
+		public function load_all_hooks() {				
 			add_action( 'admin_print_styles', array( $this, 'add_styles' ) );
 			add_action( 'admin_print_scripts', array( $this, 'add_scripts' ) );
 			add_action( 'add_meta_boxes', array( $this, 'add_box' ) );
 			add_action('admin_menu', array( $this, 'add_menu'));
 			add_action( 'admin_init', array( $this, 'register_plugin_settings') );
-			//add_action( 'admin_init', array( $this, 'page_init' ) );
-			//add_action( 'admin_footer', array( $this,'customer_order_lightbox') );
-			//add_action('wp_ajax_view_customer_order_history', array( $this,'view_customer_order_history_callback'));
-
 			if(isset($_POST['process_fufillment_csv'])) {
 				$this->doCSV();
 				if(get_option('jigoshop_order_exporter_type') == 'ftp') {
@@ -61,8 +49,6 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 				}
 				
 			}
-
-
 			
 		}
 
