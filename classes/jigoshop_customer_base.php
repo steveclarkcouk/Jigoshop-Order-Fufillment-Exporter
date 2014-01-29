@@ -1,5 +1,5 @@
 <?php
-class  Jigoshop_Customer_Base {
+class   Jigoshop_Fufillment_Order {
 	
 		public function __construct() {
 

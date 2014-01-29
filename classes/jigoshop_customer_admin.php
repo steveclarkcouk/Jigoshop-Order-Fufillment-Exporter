@@ -8,7 +8,7 @@
 */
 
 
-class Jigoshop_Customer_Admin extends Jigoshop_Customer_Base {
+class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 
 		var $types = array('email','ftp');
 		var $version = '1';
