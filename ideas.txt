@@ -1,0 +1,6 @@
+1. Create a new table of orders that have been added with a timestamp / i.e. if order is processed ( Payment taken then we add it ) - Use Jigoshop action / hook
+2. Add Meta Box to order to add to next slot of deliveries
+3. Add Options for FTP UN / PW / HOST & Time Of Day 
+4. Run Cron Job to get all the orders for a given day, create a CSV and then upload to the server filename as timestamp
+
+Easy :-p
