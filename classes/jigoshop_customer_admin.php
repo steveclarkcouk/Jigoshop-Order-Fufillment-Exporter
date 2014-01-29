@@ -466,7 +466,7 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 				}
 				fclose($fp);
 
-
+				$this->sendAdministratorCSV();
 
 				//print_r($data_to_export);
 			}
@@ -488,7 +488,7 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 			   $attachments = plugin_dir_path( __FILE__ ) . 'list.csv';
 			   $headers = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>' . "\r\n";
 			   $x_mail = wp_mail($email, 'Fufillment Export For' . get_bloginfo('name'), 'Please find attached CSV file of orders that require fufillment', $headers, $attachments );
-			   $y_mail = wp_mail(get_bloginfo('admin_email') , 'Fufillment Export For' . get_bloginfo('name'), 'Please find attached CSV file of orders that require fufillment', $headers, $attachments );
+			   $this->sendAdministratorCSV();
 
 			   // -- Update Orders Meta
 			   $orders = $this->getTodaysProcessedOrders();
@@ -501,6 +501,12 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 			} else {
 				$this->errors[] = 'No Address has been set to forward this CSV on';
 			}
+		}
+
+		public function sendAdministratorCSV() {
+			$attachments = plugin_dir_path( __FILE__ ) . 'list.csv';
+			$headers = 'From: ' . get_bloginfo('name') . ' <' . get_bloginfo('admin_email') . '>' . "\r\n";
+			$y_mail = wp_mail(get_bloginfo('admin_email') , 'Fufillment Export For' . get_bloginfo('name'), 'Please find attached CSV file of orders that require fufillment', $headers, $attachments );
 		}
 
 
