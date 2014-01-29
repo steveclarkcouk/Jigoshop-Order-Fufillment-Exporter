@@ -106,7 +106,9 @@ class Jigoshop_Customer_Admin extends Jigoshop_Customer_Base {
 			}
 
 			$status = (get_post_meta($post->ID,'procurement_uploaded', true)) ? '<span class="sent">Sent</span>' : '<span class="not-sent">Not Sent</span>' ;
-			$time = (get_post_meta($post->ID,'procurement_timestamp', true)) ? date('d/F/Y', strtotime(get_post_meta($post->ID,'procurement_timestamp', true))) : 'In Queue to send'
+			$time = (get_post_meta($post->ID,'procurement_timestamp', true)) ? date('d/F/Y', get_post_meta($post->ID,'procurement_timestamp', true)) : 'In Queue to send' ;
+
+			print_r(get_post_meta($post->ID));
 
 			?><table class="form-table">
                 <tr>
@@ -325,14 +327,12 @@ class Jigoshop_Customer_Admin extends Jigoshop_Customer_Base {
 			if (!$upload) { 
 			     $this->errors[] = "FTP upload has failed!";
 			} else {
-				// -- Set Current Upload Time
-				$upload_time = time();
-
+				
 				// -- Loop Through Orders Attaching Meta
 				if($orders) {
 					foreach($orders as $order) {
 						update_post_meta( $order->ID, 'procurement_uploaded', true );
-						update_post_meta( $order->ID, 'procurement_timestamp', $upload_time );
+						update_post_meta( $order->ID, 'procurement_timestamp',  time() );
 					}
 				}
 			    // -- Delete the old CSV file
@@ -492,8 +492,9 @@ class Jigoshop_Customer_Admin extends Jigoshop_Customer_Base {
 			   $orders = $this->getTodaysProcessedOrders();
 			   if($orders) {
 					foreach($orders as $order) {
+						echo time();
 						update_post_meta( $order->ID, 'procurement_uploaded', true );
-						update_post_meta( $order->ID, 'procurement_timestamp', $upload_time );
+						update_post_meta( $order->ID, 'procurement_timestamp', time() );
 					}
 				}
 			} else {
