@@ -207,7 +207,9 @@ class Jigoshop_Customer_Admin extends Jigoshop_Customer_Base {
 					<?php endif; ?>
 					
 				</table>
-				<form method="post" style="margin:2em 0;"><input class="fufill_me_baby button button-primary" type="submit" name="process_fufillment_csv" value="Process CSV Fufilment" /></form>
+				<?php if($orders) : ?>
+					<form method="post" style="margin:2em 0;"><input class="fufill_me_baby button button-primary" type="submit" name="process_fufillment_csv" value="Process CSV Fufilment" /></form>
+				<?php endif; ?>
 			</div>
 
 			<div id="plugin_settings">
