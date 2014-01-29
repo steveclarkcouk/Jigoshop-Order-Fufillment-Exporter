@@ -1,4 +1,4 @@
-# Jigoshop Fufillment Order Exporter
+# Jigoshop Fufillment Order Exporter ( Very Much Beta )
 
 A simple plugin that allows orders to be exported as a CSV emailed or FTP'd to a server for an external fufillment company. At present it is not very flexible 
 and was built for a specific site.
