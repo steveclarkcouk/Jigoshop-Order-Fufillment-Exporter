@@ -42,10 +42,10 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 				$this->doCSV();
 				if(get_option('jigoshop_order_exporter_type') == 'ftp') {
 					
-					$this->ftpCSVFile();
+					//$this->ftpCSVFile();
 				}
 				if(get_option('jigoshop_order_exporter_type') == 'email') {
-					$this->doEmail();
+					//$this->doEmail();
 				}
 				
 			}
@@ -284,9 +284,19 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 								'operator' => 'IN'
 							)
 						),
-						'meta_key'=> 'procurement_uploaded',
-						'meta_value' =>  true,
-						'meta_compare' => '!='
+						'meta_query' => array(
+							'relation' => 'OR',
+							array(
+								'key' => 'procurement_uploaded',
+								'value' => '',
+								'compare' => 'NOT EXISTS'
+							),
+							array(
+								'key' => 'procurement_uploaded',
+								'value' => true,
+								'compare' => '!='
+							)
+						)
 				);
 				return get_posts( $args );
 		}
@@ -374,6 +384,7 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 					
 					foreach($_order->items as $item) {
 
+						
 
 						// -- Lets Get Product Specific Stuff Done Here
 						if (isset($item['variation_id']) && $item['variation_id'] > 0) {
@@ -385,62 +396,66 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 							$_product = new jigoshop_product( $item['id'] );
 	                    }
 
-	                    // -- Has SKU
-	                    $product_id = ($_product->sku) ? $_product->sku : $_product->ID;
 
-	                    // -- Is A Variant
-	                    $variant_html = null;
-                        if (isset($_product->variation_data)) :
-                            $variant_html = jigoshop_get_formatted_variation( $_product->variation_data, true );
-                        elseif ( isset($item['variation']) && is_array($item['variation']) ) :
-                            foreach( $item['variation'] as $var ) {
-                                $variant_html .= "{$var['name']} : {$var['value']}";
-                            }
-                        else :
-                            $variant_html = '';
-                        endif;
-                       
-	                    // -- Has Customisation
-                        $custom = null; $custom_html = null;
+	                  	// -- Check Its Not Downloadble
+	                  	if($_product->product_type != 'downloadable')  {
 
-	                     if ( ! empty( $item['customization'] ) ) {
-                           $custom = $item['customization'];
-                           $label = apply_filters( 'jigoshop_customized_product_label', __(' Personal: ','jigoshop') );                          
-                        }
+	                  		// -- Has SKU
+		                    $product_id = ($_product->sku) ? $_product->sku : $_product->ID;
 
-                        if($custom) {
-                        	$custom_html = "Customisation\r\n\r\n" . $label . ': ' . $custom;
-                        }
-                         
+		                    // -- Is A Variant
+		                    $variant_html = null;
+	                        if (isset($_product->variation_data)) :
+	                            $variant_html = jigoshop_get_formatted_variation( $_product->variation_data, true );
+	                        elseif ( isset($item['variation']) && is_array($item['variation']) ) :
+	                            foreach( $item['variation'] as $var ) {
+	                                $variant_html .= "{$var['name']} : {$var['value']}";
+	                            }
+	                        else :
+	                            $variant_html = '';
+	                        endif;
+	                       
+		                    // -- Has Customisation
+	                        $custom = null; $custom_html = null;
+
+		                     if ( ! empty( $item['customization'] ) ) {
+	                           $custom = $item['customization'];
+	                           $label = apply_filters( 'jigoshop_customized_product_label', __(' Personal: ','jigoshop') );                          
+	                        }
+
+	                        if($custom) {
+	                        	$custom_html = "Customisation\r\n\r\n" . $label . ': ' . $custom;
+	                        }
+	                         
 
 
-						$values[] = array(
-							date('d F Y', strtotime($order->post_date)),
-							$order->ID,
-							$_order->billing_first_name . ' ' . $order->billing_last_name,
-							$_order->shipping_address_1,
-							$_order->shipping_address_2,
-							'',
-							$_order->shipping_city,
-							$_order->shipping_state,
-							$_order->shipping_postcode,
-							$_order->shipping_country,
-							jigoshop_countries::$countries[$_order->shipping_country],
-							$product_id,
-							$item['name'],
-							$item['qty'],
-							$order->user_id . '#' . $order->ID,   // USER ID & ORDER ID
-							$_order->billing_phone,
-							'',
-							$variant_html . "\r\n\r\n" . $custom_html,
-							$_order->billing_email,
-							'N/A',
-							'N/A',
-							'Website',
-							($item['cost'] * $item['qty']),
-							$_order->customer_note	
-						);
-
+							$values[] = array(
+								date('d F Y', strtotime($order->post_date)),
+								$order->ID,
+								$_order->billing_first_name . ' ' . $order->billing_last_name,
+								$_order->shipping_address_1,
+								$_order->shipping_address_2,
+								'',
+								$_order->shipping_city,
+								$_order->shipping_state,
+								$_order->shipping_postcode,
+								$_order->shipping_country,
+								jigoshop_countries::$countries[$_order->shipping_country],
+								$product_id,
+								$item['name'],
+								$item['qty'],
+								$order->user_id . '#' . $order->ID,   // USER ID & ORDER ID
+								$_order->billing_phone,
+								'',
+								$variant_html . "\r\n\r\n" . $custom_html,
+								$_order->billing_email,
+								'N/A',
+								'N/A',
+								'Website',
+								($item['cost'] * $item['qty']),
+								$_order->customer_note	
+							);
+	                  	}
 					}
 				}
 
