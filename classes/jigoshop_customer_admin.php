@@ -42,10 +42,10 @@ class Jigoshop_Fufillment_Order_Admin extends  Jigoshop_Fufillment_Order {
 				$this->doCSV();
 				if(get_option('jigoshop_order_exporter_type') == 'ftp') {
 					
-					//$this->ftpCSVFile();
+					$this->ftpCSVFile();
 				}
 				if(get_option('jigoshop_order_exporter_type') == 'email') {
-					//$this->doEmail();
+					$this->doEmail();
 				}
 				
 			}
